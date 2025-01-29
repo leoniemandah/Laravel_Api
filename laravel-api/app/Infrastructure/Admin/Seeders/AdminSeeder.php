@@ -5,7 +5,7 @@ namespace App\Infrastructure\Admin\Seeders;
 use App\Infrastructure\Admin\Factories\AdminFactory;
 use Illuminate\Database\Seeder;
 
-class AdministratorSeeder extends Seeder
+class AdminSeeder extends Seeder
 {
     /**
      * Run the database seeds.

@@ -11,9 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('admins', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::table('admins', function (Blueprint $table) {
+            $table->string('email')->unique()->after('name'); // Ajoute une colonne 'email' après 'name'
         });
     }
 
@@ -22,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('admins');
+        Schema::table('admins', function (Blueprint $table) {
+            //
+        });
     }
 };

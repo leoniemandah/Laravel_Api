@@ -1,14 +1,14 @@
 <?php
 
-namespace Src\Infrastructure\Administrator\Repositories;
+namespace App\Infrastructure\Admin\Repositories;
 
-use Src\Domain\Administrator\Models\Administrator;
-use Src\Domain\Administrator\Repositories\AdministratorRepositoryInterface;
+use App\Domain\Admin\Models\Admin;
+use App\Domain\Admin\Repositories\AdminRepositoryInterface;
 
-class AdministratorRepository implements AdministratorRepositoryInterface
+class AdminRepository implements AdminRepositoryInterface
 {
-    public function findByEmail(string $email): ?Administrator
+    public function findByEmail(string $email): ?Admin
     {
-        return Administrator::where('email', $email)->first();
+        return Admin::where('email', $email)->first();
     }
 }

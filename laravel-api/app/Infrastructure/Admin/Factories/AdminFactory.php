@@ -1,16 +1,16 @@
 <?php
 
-namespace Src\Infrastructure\Administrator\Factories;
+namespace App\Infrastructure\Admin\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
-use Src\Domain\Administrator\Models\Administrator;
+use App\Domain\Admin\Models\Admin;
 
-class AdministratorFactory extends Factory
+class AdminFactory extends Factory
 {
 
 
-    protected $model = Administrator::class;
+    protected $model = Admin::class;
 
     /**
      * Define the model's default state.
