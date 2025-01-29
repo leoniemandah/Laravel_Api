@@ -9,6 +9,7 @@ use Illuminate\Http\Response;
 use App\Infrastructure\Admin\Factories\AdminFactory;
 use App\Infrastructure\Profile\Factories\ProfileFactory;
 use App\Domain\Profile\Services\ProfileServiceInterface;
+use App\Infrastructure\Profile\Services\ProfileService;
 use Tests\TestCase;
 
 class DeleteProfileTest extends TestCase
@@ -45,7 +46,7 @@ class DeleteProfileTest extends TestCase
 
         // On appelle la méthode de suppression
         // On tente de supprimer un profil inexistant
-        $response = $this->deleteJson('api/profile/' . $profil->id, [], [
+        $response = $this->deleteJson('api/profile/' . $profile->id, [], [
             'Authorization' => 'Bearer ' . $token,
         ]);
         // On vérifie que le profil a bien été supprimé

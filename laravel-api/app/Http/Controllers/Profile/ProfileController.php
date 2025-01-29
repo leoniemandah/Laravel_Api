@@ -2,78 +2,83 @@
 
 namespace App\Http\Controllers\Profile;
 
-use App\Domain\Profile\Services\ProfileService;
-use App\Http\Requests\Profile\ProfileRequest;
-use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Profile\ProfileRequest;
+use App\Http\Resources\Profile\ProfileResource;
+use App\Domain\Profile\Services\ProfileServiceInterface;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-/**
- * Contrôleur pour gérer les opérations CRUD sur les profils.
- */
 class ProfileController extends Controller
 {
-    /**
-     * Instance du service de profil.
-     *
-     * @var ProfileService
-     */
-    private ProfileService $profileService;
+    protected ProfileServiceInterface $profileService;
 
-    /**
-     * Constructeur du contrôleur.
-     *
-     * @param ProfileService $profileService Service injecté pour gérer la logique métier des profils.
-     */
-    public function __construct(ProfileService $profileService)
+    public function __construct(ProfileServiceInterface $profileService)
     {
         $this->profileService = $profileService;
     }
 
-    /**
-     * Récupère tous les profils.
-     *
-     * @return JsonResponse Liste de tous les profils.
-     */
-    public function index(): JsonResponse
+    public function index(Request $request)
     {
-        $profiles = $this->profileService->getAllProfiles();
-        return response()->json($profiles, 200);
+        try {
+            return ProfileResource::collection($this->profileService->getAllProfile($request));
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Un problème est survenu lors de la récupération des profils.',
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
-    /**
-     * Crée un nouveau profil.
-     *
-     * @param ProfileRequest $request Requête validée contenant les données du profil.
-     * @return JsonResponse Le profil nouvellement créé.
-     */
-    public function store(ProfileRequest $request): JsonResponse
+    public function store(ProfileRequest $request)
     {
-        $profile = $this->profileService->createProfile($request->validated());
-        return response()->json($profile, 201);
+        try {
+            $profileDTO = $request->toDTO();
+            $this->profileService->createProfile($profileDTO, $request->file('image'));
+            return response()->json(['message' => 'Le profil a bien été créé.'], Response::HTTP_CREATED);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Une erreur est survenue.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
-    /**
-     * Met à jour un profil existant.
-     *
-     * @param ProfileRequest $request Requête validée contenant les données mises à jour du profil.
-     * @param int $id Identifiant du profil à mettre à jour.
-     * @return JsonResponse Le profil mis à jour.
-     */
-    public function update(ProfileRequest $request, int $id): JsonResponse
+    public function show(string $id)
     {
-        $updatedProfile = $this->profileService->updateProfile($id, $request->validated());
-        return response()->json($updatedProfile, 200);
+        try {
+            return new ProfileResource($this->profileService->getProfileById($id));
+        } catch (NotFoundHttpException $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], Response::HTTP_NOT_FOUND);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Une erreur est survenue.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
-    /**
-     * Supprime un profil.
-     *
-     * @param int $id Identifiant du profil à supprimer.
-     * @return JsonResponse Réponse vide avec un code de statut 204 (No Content).
-     */
-    public function destroy(int $id): JsonResponse
+    public function update(ProfileRequest $request, string $id)
     {
-        $this->profileService->deleteProfile($id);
-        return response()->json(null, 204);
+        try {
+            $profileDTO = $request->toDTO();
+            $image = $request->hasFile('image') ? $request->file('image') : null;
+            $this->profileService->updateProfile($profileDTO, $id, $image);
+
+            return response()->json(['message' => 'Le profil a bien été modifié.'], Response::HTTP_OK);
+        } catch (NotFoundHttpException $e) {
+            return response()->json(['message' => $e->getMessage()], Response::HTTP_NOT_FOUND);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Une erreur est survenue.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+
+    public function destroy(string $id)
+    {
+        try {
+            $this->profileService->deleteProfile($id);
+            return response()->json(['message' => 'Le profil a bien été supprimé.'], Response::HTTP_OK);
+        } catch (NotFoundHttpException $e) {
+            return response()->json(['message' => $e->getMessage()], Response::HTTP_NOT_FOUND);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Une erreur est survenue.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 }

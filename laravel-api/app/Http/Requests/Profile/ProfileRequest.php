@@ -14,10 +14,10 @@ class ProfileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nom' => 'required|string|max:255',
-            'prenom' => 'required|string|max:255',
+            'lastName' => 'required|string|max:255',
+            'firstName' => 'required|string|max:255',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'statut' => 'required|string|in:actif,inactif,en attente',
+            'status' => 'required|string|in:actif,inactif,en attente',
         ];
     }
 }

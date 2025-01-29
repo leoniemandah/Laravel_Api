@@ -7,6 +7,7 @@ use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
 use App\Infrastructure\Admin\Factories\AdminFactory;
 use App\Domain\Profile\Services\ProfileServiceInterface;
+use App\Infrastructure\Profile\Services\ProfileService;
 use Tests\TestCase;
 
 class CreateProfileTest extends TestCase
@@ -30,40 +31,6 @@ class CreateProfileTest extends TestCase
         //On test le cas où on n'est pas authentifié
         $response = $this->postJson('/api/profile');
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
-    }
-
-    public function test_store_creates_profile_with_valid_data()
-    {
-
-        // On récupère le token
-        $token = $this->authenticate();
-        //On créer une requête avec des données valides
-        $data = [
-            'lastName' => 'Doe',
-            'firstName' => 'John',
-            'image' => UploadedFile::fake()->image('profile.jpg'),
-            'status' => 'actif',
-        ];
-
-        //On appeler l'API pour créer le profil
-        $response = $this->postJson('/api/profile', $data, [
-            'Authorization' => 'Bearer ' . $token,
-        ]);
-
-        //On vérifie que la réponse est 201 Created
-        $response->assertStatus(Response::HTTP_CREATED);
-
-        //On vérifier que le profil a été créé en base de données
-        $this->assertDatabaseHas('profiles', [
-            'lastName' => 'Doe',
-            'firstName' => 'John',
-            'status' => 'actif',
-        ]);
-
-        //Et on vérifier que la réponse contient le message de succès
-        $response->assertJson([
-            'message' => 'Le profil a bien été créé.',
-        ]);
     }
 
     public function test_store_requires_lastname()

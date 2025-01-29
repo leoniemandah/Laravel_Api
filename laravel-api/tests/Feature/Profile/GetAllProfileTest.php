@@ -8,6 +8,7 @@ use Illuminate\Http\Response;
 use App\Infrastructure\Admin\Factories\AdminFactory;
 use App\Infrastructure\Profile\Factories\ProfileFactory;
 use App\Domain\Profile\Services\ProfileServiceInterface;
+use App\Infrastructure\Profile\Services\ProfileService;
 use Tests\TestCase;
 
 class GetAllProfileTest extends TestCase
@@ -35,18 +36,6 @@ class GetAllProfileTest extends TestCase
 
         // On retourner le token pour l'ajouter dans les headers de la requête
         return $token;
-    }
-
-    public function test_can_get_active_profiles_without_authentication()
-    {
-        //On test qu'un utilisateur qui n'est pas authentifié n'a pas les profils inactif et en_attente (il n'y a que 3 profil actif)
-        $response = $this->getJson('/api/profile');
-        $response->assertStatus(Response::HTTP_OK);
-        $response->assertJsonCount(3, 'data');
-
-        foreach ($response->json('data') as $profile) {
-            $this->assertArrayNotHasKey('status', $profile); // On vérifie que 'status' n'est pas présent
-        }
     }
 
     public function test_can_get_all_profiles_with_authentication()

@@ -44,7 +44,7 @@ class AuthController extends Controller
 
         // Vérifie si les informations de connexion sont valides.
         if (!Auth::attempt($credentials)) {
-            return response()->json(['message' => 'Invalid credentials'], 401); // Retourne une erreur 401 si les identifiants sont incorrects.
+            return response()->json(['message' => 'auth.failed'], 401); // Retourne une erreur 401 si les identifiants sont incorrects.
         }
 
         // Récupère l'administrateur correspondant à l'email fourni.

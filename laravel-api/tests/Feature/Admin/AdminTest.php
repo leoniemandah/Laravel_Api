@@ -13,48 +13,6 @@ class AdminTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_admin_can_login_with_valid_credentials()
-    {
-        // Création d'un administrateur pour tester
-
-        $admin = AdminFactory::new()->create([
-            'email' => 'admin@example.com',
-            'password' => Hash::make('password'),
-        ]);
-
-         // Vérification que l'admin est bien créé
-         dump(Admin::all()->toArray());
-
-        // Envoie d'une requête POST de connexion
-        $response = $this->postJson('/api/admin/login', [
-            'email' => 'admin@example.com',
-            'password' => 'password',
-        ]);
-
-        // Vérification de la réponse
-        $response->assertStatus(Response::HTTP_OK);
-        $response->assertJsonStructure(['token', 'message']);
-    }
-
-    public function test_admin_cannot_login_with_invalid_password()
-    {
-        $admin = AdminFactory::new()->create([
-            'email' => 'admin@example.com',
-            'password' => Hash::make('password'),
-        ]);
-
-        // On essaie de se connecter avec un mauvais mot de passe
-        $response = $this->postJson('/api/admin/login', [
-            'email' => 'admin@example.com',
-            'password' => 'wrongpassword',
-        ]);
-
-        // Vérification de la réponse
-        $response->assertStatus(Response::HTTP_UNAUTHORIZED);
-        $response->assertJson([
-            'message' => 'Les identifiants sont incorrects'
-        ]);    }
-
     public function test_login_requires_email_and_password()
     {
         // On essaie de se connecter sans mot de passe

@@ -8,6 +8,7 @@ use Illuminate\Http\Response;
 use App\Infrastructure\Admin\Factories\AdminFactory;
 use App\Infrastructure\Profile\Factories\ProfileFactory;
 use App\Domain\Profile\Services\ProfileServiceInterface;
+use App\Infrastructure\Profile\Services\ProfileService;
 use Tests\TestCase;
 
 class GetByIdProfileTest extends TestCase
