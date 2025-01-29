@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Infrastructure\Profile\Http\Controllers;
+namespace App\Http\Controllers\Profile\Controllers;
 
 use App\Domain\Profile\Services\ProfileService;
 use App\Infrastructure\Profile\Http\Requests\ProfileRequest;
