@@ -6,6 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
 use App\Infrastructure\Admin\Factories\AdminFactory;
+use App\Domain\Profile\Services\ProfileServiceInterface;
 use Tests\TestCase;
 
 class CreateProfileTest extends TestCase

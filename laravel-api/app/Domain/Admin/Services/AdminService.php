@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Hash;
  * Cette classe gère le processus d'authentification des administrateurs
  * en utilisant le repository d'administrateurs pour la récupération des données.
  */
-class AdminAuthService
+class AdminService
 {
     /**
      * L'interface du repository d'administrateurs.

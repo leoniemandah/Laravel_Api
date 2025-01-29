@@ -7,6 +7,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
 use App\Infrastructure\Admin\Factories\AdminFactory;
 use App\Infrastructure\Profile\Factories\ProfileFactory;
+use App\Domain\Profile\Services\ProfileServiceInterface;
 use Tests\TestCase;
 
 class GetAllProfileTest extends TestCase
